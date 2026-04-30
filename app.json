@@ -1,30 +1,69 @@
 {
   "expo": {
-    "name": "MedOverlay",
-    "slug": "MedOverlay",
+    "name": "OrthoLens",
+    "slug": "ortholens",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
+    "scheme": "ortholens",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0a0a0a"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "MedOverlay needs camera access to overlay X-ray images on the patient's body in real time.",
+        "NSPhotoLibraryUsageDescription": "MedOverlay needs photo library access to import X-ray images.",
+        "NSPhotoLibraryAddUsageDescription": "MedOverlay needs permission to save overlay captures to your photo library.",
+        "NSMicrophoneUsageDescription": "Required by the camera module."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0a0a0a"
       },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES"
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "MedOverlay needs camera access to overlay X-ray images on the patient's body in real time.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "MedOverlay needs photo library access to import X-ray images.",
+          "cameraPermission": "MedOverlay needs camera access to capture X-ray film."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow MedOverlay to save overlay captures.",
+          "savePhotosPermission": "Allow MedOverlay to save overlay captures.",
+          "isAccessMediaLocationEnabled": false
+        }
+      ]
+    ]
   }
 }
