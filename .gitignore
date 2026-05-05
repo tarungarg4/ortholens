@@ -1,41 +1,65 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
+# ── Dependencies ──────────────────────────────────────────────
 node_modules/
 
-# Expo
+# ── Expo ──────────────────────────────────────────────────────
 .expo/
 dist/
 web-build/
 expo-env.d.ts
 
-# Native
+# ── EAS / local builds ────────────────────────────────────────
+*.apk
+*.aab
+*.ipa
+*.tgz
+eas-build.log
+
+# ── Generated native folders (managed workflow) ───────────────
+/ios
+/android
 .kotlin/
+
+# ── Metro bundler ─────────────────────────────────────────────
+.metro-health-check*
+
+# ── Environment & secrets ─────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Credentials & certificates ────────────────────────────────
 *.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
+*.pem
+credentials.json
+google-services.json
+GoogleService-Info.plist
 
-# Metro
-.metro-health-check*
-
-# debug
+# ── Logs ──────────────────────────────────────────────────────
+*.log
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
-.DS_Store
-*.pem
-
-# local env files
-.env*.local
-
-# typescript
+# ── TypeScript ────────────────────────────────────────────────
 *.tsbuildinfo
 
-# generated native folders
-/ios
-/android
+# ── macOS ─────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── IDE ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Temp ──────────────────────────────────────────────────────
+tmp/
+temp/
+coverage/

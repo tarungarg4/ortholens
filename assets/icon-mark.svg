@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#0f1a2b"></stop>
+      <stop offset="60%" stop-color="#0a1220"></stop>
+      <stop offset="100%" stop-color="#05080f"></stop>
+    </radialGradient>
+    <radialGradient id="lensGlass" cx="40%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#7ee0ff" stop-opacity="0.32"></stop>
+      <stop offset="45%" stop-color="#4fc3f7" stop-opacity="0.16"></stop>
+      <stop offset="100%" stop-color="#0a1830" stop-opacity="0.95"></stop>
+    </radialGradient>
+    <linearGradient id="bone" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eaf7ff"></stop>
+      <stop offset="50%" stop-color="#a8e1f5"></stop>
+      <stop offset="100%" stop-color="#5fcaf7"></stop>
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5ad0ff"></stop>
+      <stop offset="50%" stop-color="#2a8fc4"></stop>
+      <stop offset="100%" stop-color="#0e3d59"></stop>
+    </linearGradient>
+    <linearGradient id="ringInner" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a1626"></stop>
+      <stop offset="100%" stop-color="#1a2a40"></stop>
+    </linearGradient>
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"></feGaussianBlur>
+      <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+    </filter>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="40"></feGaussianBlur>
+    </filter>
+    <clipPath id="lensInterior"><circle cx="512" cy="512" r="340"></circle></clipPath>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="224" ry="224" fill="url(#bg)"></rect>
+  <circle cx="512" cy="512" r="380" fill="#4fc3f7" opacity="0.10" filter="url(#softGlow)"></circle>
+  <circle cx="512" cy="512" r="380" fill="url(#ring)"></circle>
+  <circle cx="512" cy="512" r="356" fill="url(#ringInner)"></circle>
+  <circle cx="512" cy="512" r="340" fill="url(#lensGlass)"></circle>
+
+  <g clip-path="url(#lensInterior)" filter="url(#cyanGlow)">
+    <g fill="url(#bone)">
+      <path d="M 478 200 L 478 460 L 546 460 L 546 200 Q 546 188 512 188 Q 478 188 478 200 Z"></path>
+
+      <path d="M 460 460 Q 408 462 380 482 Q 352 504 348 540 Q 346 572 366 590 Q 388 608 432 610 Q 478 612 510 600 Q 522 596 528 588 L 528 470 Q 524 462 514 460 Z"></path>
+      <path d="M 496 470 L 496 588 Q 502 596 514 600 Q 546 612 592 610 Q 636 608 658 590 Q 678 572 676 540 Q 672 504 644 482 Q 616 462 564 460 L 510 460 Q 500 462 496 470 Z"></path>
+
+      <ellipse cx="512" cy="540" rx="14" ry="62" fill="#0a1830" opacity="0.45"></ellipse>
+
+      <ellipse cx="512" cy="535" rx="38" ry="52" fill="url(#bone)"></ellipse>
+
+      <path d="M 470 612 Q 466 660 466 720 L 470 820 Q 470 838 482 842 Q 494 846 502 842 Q 510 838 510 820 L 512 720 Q 510 660 506 612 Z"></path>
+      <path d="M 538 612 Q 542 660 542 720 L 542 820 Q 542 838 552 842 Q 564 846 572 842 Q 580 838 580 820 L 582 720 Q 580 660 574 612 Z"></path>
+
+      <path d="M 612 622 Q 606 660 606 720 L 608 818 Q 608 832 616 836 Q 626 840 632 836 Q 638 832 640 818 L 642 720 Q 640 662 634 628 Z"></path>
+    </g>
+
+    <ellipse cx="498" cy="220" rx="14" ry="6" fill="#ffffff" opacity="0.4"></ellipse>
+    <ellipse cx="528" cy="220" rx="14" ry="6" fill="#ffffff" opacity="0.4"></ellipse>
+    <ellipse cx="404" cy="538" rx="16" ry="10" fill="#ffffff" opacity="0.3"></ellipse>
+    <ellipse cx="620" cy="538" rx="16" ry="10" fill="#ffffff" opacity="0.3"></ellipse>
+    <ellipse cx="500" cy="525" rx="10" ry="14" fill="#ffffff" opacity="0.4"></ellipse>
+
+    <line x1="172" y1="512" x2="852" y2="512" stroke="#4fc3f7" stroke-width="1" opacity="0.18"></line>
+    <line x1="512" y1="172" x2="512" y2="852" stroke="#4fc3f7" stroke-width="1" opacity="0.18"></line>
+    <circle cx="512" cy="512" r="4" fill="none" stroke="#4fc3f7" stroke-width="1.5" opacity="0.4"></circle>
+  </g>
+
+  <ellipse cx="380" cy="340" rx="120" ry="55" fill="#ffffff" opacity="0.10" transform="rotate(-30 380 340)"></ellipse>
+  <ellipse cx="350" cy="310" rx="50" ry="22" fill="#ffffff" opacity="0.25" transform="rotate(-30 350 310)"></ellipse>
+
+  <circle cx="512" cy="512" r="380" fill="none" stroke="#7ee0ff" stroke-width="2" opacity="0.55"></circle>
+  <circle cx="512" cy="512" r="340" fill="none" stroke="#4fc3f7" stroke-width="1" opacity="0.3"></circle>
+</svg>

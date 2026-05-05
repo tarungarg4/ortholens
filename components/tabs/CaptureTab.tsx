@@ -4,20 +4,11 @@ import {
   StyleSheet, Image, Alert, ActivityIndicator, ScrollView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
 import Svg, { Path, Rect, Circle } from 'react-native-svg';
-import { useXrayLibrary } from '../hooks/useXrayLibrary';
-import AppHeader from '../components/AppHeader';
-import TabBar, { TabId } from '../components/TabBar';
-import { colors, radii, space, fontSize, tracking } from '../theme';
+import { XRayEntry } from '../../hooks/useXrayLibrary';
+import AppHeader from '../AppHeader';
+import { colors, radii, space, fontSize, tracking } from '../../theme';
 
-function IconBack() {
-  return (
-    <Svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke={colors.fg1} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-      <Path d="M15 18l-6-6 6-6" />
-    </Svg>
-  );
-}
 function IconPhoto() {
   return (
     <Svg width={28} height={28} viewBox="0 0 24 24" fill="none" stroke={colors.cyan300} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
@@ -36,9 +27,12 @@ function IconCamera() {
   );
 }
 
-export default function ImportScreen() {
-  const router = useRouter();
-  const { addXRay } = useXrayLibrary();
+interface Props {
+  addXRay: (uri: string, label: string) => Promise<XRayEntry>;
+  onSaved: () => void;
+}
+
+export default function CaptureTab({ addXRay, onSaved }: Props) {
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [label, setLabel] = useState('');
   const [saving, setSaving] = useState(false);
@@ -69,18 +63,15 @@ export default function ImportScreen() {
     }
   }
 
-  function handleTabChange(id: TabId) {
-    if (id === 'cases') router.back();
-    else if (id === 'profile') router.replace('/profile');
-  }
-
   async function handleSave() {
     if (!imageUri) return;
     const finalLabel = label.trim() || `X-Ray ${new Date().toLocaleDateString()}`;
     setSaving(true);
     try {
       await addXRay(imageUri, finalLabel);
-      router.replace('/');
+      setImageUri(null);
+      setLabel('');
+      onSaved();
     } catch {
       Alert.alert('Error', 'Failed to save X-ray. Please try again.');
     } finally {
@@ -90,16 +81,7 @@ export default function ImportScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader
-        eyebrow="New Case"
-        title="Import X-Ray"
-        leading={
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} activeOpacity={0.7}>
-            <IconBack />
-          </TouchableOpacity>
-        }
-      />
-
+      <AppHeader eyebrow="New Case" title="Import X-Ray" />
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={styles.sectionLabel}>Select Source</Text>
         <View style={styles.sourceRow}>
@@ -145,14 +127,9 @@ export default function ImportScreen() {
           disabled={!imageUri || saving}
           activeOpacity={0.85}
         >
-          {saving ? (
-            <ActivityIndicator color={colors.bg} />
-          ) : (
-            <Text style={styles.saveBtnText}>Save to Cases</Text>
-          )}
+          {saving ? <ActivityIndicator color={colors.bg} /> : <Text style={styles.saveBtnText}>Save to Cases</Text>}
         </TouchableOpacity>
       </ScrollView>
-      <TabBar active="capture" onChange={handleTabChange} />
     </View>
   );
 }
@@ -160,88 +137,48 @@ export default function ImportScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
   content: { padding: space[5], gap: space[4] },
-  backBtn: {
-    width: 40, height: 40,
-    borderRadius: radii.md,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderWidth: 1,
-    borderColor: colors.border2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   sectionLabel: {
-    fontSize: fontSize.xs,
-    letterSpacing: tracking.caps,
-    textTransform: 'uppercase',
-    color: colors.fg3,
-    fontWeight: '500',
+    fontSize: fontSize.xs, letterSpacing: tracking.caps,
+    textTransform: 'uppercase', color: colors.fg3, fontWeight: '500',
   },
   sourceRow: { flexDirection: 'row', gap: space[3] },
   sourceBtn: {
-    flex: 1,
-    backgroundColor: colors.surface1,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.border2,
-    padding: space[4],
-    alignItems: 'center',
-    gap: space[2],
+    flex: 1, backgroundColor: colors.surface1, borderRadius: radii.lg,
+    borderWidth: 1, borderColor: colors.border2, padding: space[4],
+    alignItems: 'center', gap: space[2],
   },
   sourceBtnIcon: {
-    width: 52, height: 52,
-    borderRadius: radii.md,
-    backgroundColor: colors.cyan700,
-    borderWidth: 1,
-    borderColor: colors.border3,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 52, height: 52, borderRadius: radii.md,
+    backgroundColor: colors.cyan700, borderWidth: 1, borderColor: colors.border3,
+    alignItems: 'center', justifyContent: 'center',
   },
   sourceBtnTitle: { color: colors.fg1, fontSize: fontSize.sm, fontWeight: '600' },
   sourceBtnSub: { color: colors.fg3, fontSize: fontSize.xs, textAlign: 'center' },
   previewContainer: { gap: space[3], alignItems: 'center' },
   preview: {
-    width: '100%', height: 260,
-    borderRadius: radii.lg,
-    backgroundColor: colors.surface2,
-    borderWidth: 1,
-    borderColor: colors.border3,
+    width: '100%', height: 260, borderRadius: radii.lg,
+    backgroundColor: colors.surface2, borderWidth: 1, borderColor: colors.border3,
   },
   changeBtn: { paddingHorizontal: space[4], paddingVertical: space[2] },
   changeBtnText: { color: colors.cyan300, fontSize: fontSize.sm },
   placeholder: {
-    height: 180,
-    backgroundColor: colors.surface1,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: colors.border2,
-    borderStyle: 'dashed',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space[2],
+    height: 180, backgroundColor: colors.surface1, borderRadius: radii.lg,
+    borderWidth: 1, borderColor: colors.border2, borderStyle: 'dashed',
+    alignItems: 'center', justifyContent: 'center', gap: space[2],
   },
   placeholderIcon: { fontSize: 36 },
   placeholderText: { color: colors.fg4, fontSize: fontSize.sm },
   input: {
-    backgroundColor: colors.surface1,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.border2,
-    paddingHorizontal: space[4],
-    paddingVertical: space[3],
-    color: colors.fg1,
-    fontSize: fontSize.base,
+    backgroundColor: colors.surface1, borderRadius: radii.md,
+    borderWidth: 1, borderColor: colors.border2,
+    paddingHorizontal: space[4], paddingVertical: space[3],
+    color: colors.fg1, fontSize: fontSize.base,
   },
   saveBtn: {
-    backgroundColor: colors.brand,
-    borderRadius: radii.lg,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginTop: space[2],
-    shadowColor: colors.brand,
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 6,
+    backgroundColor: colors.brand, borderRadius: radii.lg,
+    paddingVertical: 16, alignItems: 'center', marginTop: space[2],
+    shadowColor: colors.brand, shadowOpacity: 0.35, shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 }, elevation: 6,
   },
   saveBtnDisabled: { opacity: 0.4, shadowOpacity: 0 },
   saveBtnText: { color: colors.bg, fontWeight: '700', fontSize: fontSize.base },

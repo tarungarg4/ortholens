@@ -58,5 +58,12 @@ export function useOverlayGesture() {
     rotation.value = 0;
   };
 
-  return { composedGesture, animatedStyle, reset };
+  const getSnapshot = () => ({
+    translateX: translateX.value,
+    translateY: translateY.value,
+    scale: scale.value,
+    rotation: rotation.value,
+  });
+
+  return { composedGesture, animatedStyle, reset, getSnapshot };
 }

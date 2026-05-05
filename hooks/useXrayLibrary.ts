@@ -75,5 +75,13 @@ export function useXrayLibrary() {
     [library, save]
   );
 
-  return { library, loading, addXRay, removeXRay, renameXRay, reload: load };
+  const clearAll = useCallback(async () => {
+    try {
+      await FileSystem.deleteAsync(XRAY_DIR, { idempotent: true });
+    } catch { /* directory may not exist */ }
+    await AsyncStorage.removeItem(LIBRARY_KEY);
+    setLibrary([]);
+  }, []);
+
+  return { library, loading, addXRay, removeXRay, renameXRay, clearAll, reload: load };
 }

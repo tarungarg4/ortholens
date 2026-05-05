@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1280" width="1024" height="1280">
+  <defs>
+    <radialGradient id="bg2" cx="50%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#0f1a2b"></stop>
+      <stop offset="60%" stop-color="#0a1220"></stop>
+      <stop offset="100%" stop-color="#05080f"></stop>
+    </radialGradient>
+    <radialGradient id="lensGlass2" cx="40%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#7ee0ff" stop-opacity="0.32"></stop>
+      <stop offset="45%" stop-color="#4fc3f7" stop-opacity="0.16"></stop>
+      <stop offset="100%" stop-color="#0a1830" stop-opacity="0.95"></stop>
+    </radialGradient>
+    <linearGradient id="bone2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eaf7ff"></stop>
+      <stop offset="50%" stop-color="#a8e1f5"></stop>
+      <stop offset="100%" stop-color="#5fcaf7"></stop>
+    </linearGradient>
+    <linearGradient id="ring2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5ad0ff"></stop>
+      <stop offset="50%" stop-color="#2a8fc4"></stop>
+      <stop offset="100%" stop-color="#0e3d59"></stop>
+    </linearGradient>
+    <linearGradient id="ringInner2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a1626"></stop>
+      <stop offset="100%" stop-color="#1a2a40"></stop>
+    </linearGradient>
+    <filter id="cyanGlow2" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="blur"></feGaussianBlur>
+      <feMerge><feMergeNode in="blur"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+    </filter>
+    <clipPath id="lensInterior2"><circle cx="512" cy="460" r="280"></circle></clipPath>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1280" rx="224" ry="224" fill="url(#bg2)"></rect>
+
+  <circle cx="512" cy="460" r="320" fill="url(#ring2)"></circle>
+  <circle cx="512" cy="460" r="296" fill="url(#ringInner2)"></circle>
+  <circle cx="512" cy="460" r="280" fill="url(#lensGlass2)"></circle>
+
+  <g clip-path="url(#lensInterior2)" filter="url(#cyanGlow2)">
+    <g transform="translate(0 -52)" fill="url(#bone2)">
+      <path d="M 478 200 L 478 460 L 546 460 L 546 200 Q 546 188 512 188 Q 478 188 478 200 Z"></path>
+      <path d="M 460 460 Q 408 462 380 482 Q 352 504 348 540 Q 346 572 366 590 Q 388 608 432 610 Q 478 612 510 600 Q 522 596 528 588 L 528 470 Q 524 462 514 460 Z"></path>
+      <path d="M 496 470 L 496 588 Q 502 596 514 600 Q 546 612 592 610 Q 636 608 658 590 Q 678 572 676 540 Q 672 504 644 482 Q 616 462 564 460 L 510 460 Q 500 462 496 470 Z"></path>
+      <ellipse cx="512" cy="540" rx="14" ry="62" fill="#0a1830" opacity="0.45"></ellipse>
+      <ellipse cx="512" cy="535" rx="38" ry="52" fill="url(#bone2)"></ellipse>
+      <path d="M 470 612 Q 466 660 466 720 L 470 820 Q 470 838 482 842 Q 494 846 502 842 Q 510 838 510 820 L 512 720 Q 510 660 506 612 Z"></path>
+      <path d="M 538 612 Q 542 660 542 720 L 542 820 Q 542 838 552 842 Q 564 846 572 842 Q 580 838 580 820 L 582 720 Q 580 660 574 612 Z"></path>
+      <path d="M 612 622 Q 606 660 606 720 L 608 818 Q 608 832 616 836 Q 626 840 632 836 Q 638 832 640 818 L 642 720 Q 640 662 634 628 Z"></path>
+    </g>
+    <line x1="232" y1="460" x2="792" y2="460" stroke="#4fc3f7" stroke-width="1" opacity="0.2"></line>
+    <line x1="512" y1="180" x2="512" y2="740" stroke="#4fc3f7" stroke-width="1" opacity="0.2"></line>
+  </g>
+
+  <ellipse cx="395" cy="310" rx="100" ry="50" fill="#ffffff" opacity="0.10" transform="rotate(-30 395 310)"></ellipse>
+  <ellipse cx="370" cy="285" rx="42" ry="18" fill="#ffffff" opacity="0.25" transform="rotate(-30 370 285)"></ellipse>
+
+  <circle cx="512" cy="460" r="320" fill="none" stroke="#7ee0ff" stroke-width="2" opacity="0.55"></circle>
+  <circle cx="512" cy="460" r="280" fill="none" stroke="#4fc3f7" stroke-width="1" opacity="0.3"></circle>
+
+  <text x="512" y="970" text-anchor="middle" font-family="&#39;SF Pro Display&#39;, &#39;Inter&#39;, -apple-system, system-ui, sans-serif" font-size="120" font-weight="600" letter-spacing="-2" fill="#ffffff">Ortho<tspan fill="#4fc3f7">Lens</tspan></text>
+
+  <text x="512" y="1050" text-anchor="middle" font-family="&#39;SF Pro Display&#39;, &#39;Inter&#39;, -apple-system, system-ui, sans-serif" font-size="38" font-weight="400" letter-spacing="6" fill="#7a8aa0">SEE THROUGH</text>
+</svg>

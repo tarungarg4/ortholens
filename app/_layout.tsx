@@ -8,14 +8,13 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: '#0a0a0a' },
-          headerTintColor: '#ffffff',
-          headerTitleStyle: { fontWeight: '700' },
-          contentStyle: { backgroundColor: '#0a0a0a' },
+          headerShown: false,
+          contentStyle: { backgroundColor: '#05080f' },
         }}
       >
         <Stack.Screen name="index" options={{ title: 'OrthoLens' }} />
         <Stack.Screen name="import" options={{ title: 'Import X-Ray' }} />
+        <Stack.Screen name="profile" options={{ title: 'Profile' }} />
       </Stack>
     </GestureHandlerRootView>
   );
