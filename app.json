@@ -68,7 +68,8 @@
           "savePhotosPermission": "Allow MedOverlay to save overlay captures.",
           "isAccessMediaLocationEnabled": false
         }
-      ]
+      ],
+      "expo-font"
     ],
     "extra": {
       "router": {},
