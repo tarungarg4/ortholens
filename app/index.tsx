@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Dimensions, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { useFocusEffect } from 'expo-router';
 import { useXrayLibrary } from '../hooks/useXrayLibrary';
 import TabBar, { TabId } from '../components/TabBar';
 import CasesTab from '../components/tabs/CasesTab';
@@ -11,9 +12,11 @@ const { width: SW } = Dimensions.get('window');
 const TABS: TabId[] = ['cases', 'capture', 'profile'];
 
 export default function HomeScreen() {
-  const { library, loading, addXRay, removeXRay, renameXRay, clearAll } = useXrayLibrary();
+  const { library, loading, addXRay, removeXRay, clearAll, reload } = useXrayLibrary();
   const [activeTab, setActiveTab] = useState<TabId>('cases');
   const translateX = useSharedValue(0);
+
+  useFocusEffect(useCallback(() => { reload(); }, [reload]));
 
   function handleTabChange(id: TabId) {
     const idx = TABS.indexOf(id);
@@ -36,7 +39,6 @@ export default function HomeScreen() {
             <CasesTab
               library={library}
               loading={loading}
-              renameXRay={renameXRay}
               removeXRay={removeXRay}
               onImport={() => handleTabChange('capture')}
             />

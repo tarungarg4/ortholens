@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  View, Text, FlatList, TouchableOpacity,
-  StyleSheet, TextInput, Modal, Alert,
+  View, Text, FlatList, TouchableOpacity, StyleSheet,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import Svg, { Path } from 'react-native-svg';
@@ -36,48 +35,29 @@ function IconChevron() {
 interface Props {
   library: XRayEntry[];
   loading: boolean;
-  renameXRay: (id: string, label: string) => Promise<void>;
   removeXRay: (id: string) => Promise<void>;
   onImport: () => void;
 }
 
-export default function CasesTab({ library, loading, renameXRay, removeXRay, onImport }: Props) {
+export default function CasesTab({ library, loading, removeXRay, onImport }: Props) {
   const router = useRouter();
-  const [renameTarget, setRenameTarget] = useState<XRayEntry | null>(null);
-  const [renameText, setRenameText] = useState('');
 
   function openOverlay(entry: XRayEntry) {
-    router.push({ pathname: '/overlay', params: { uri: entry.uri, label: entry.label } });
+    router.push({
+      pathname: '/overlay',
+      params: { id: entry.id, uri: entry.uri, label: entry.label, inverted: String(entry.inverted ?? false) },
+    });
   }
 
-  function showOptions(item: XRayEntry) {
-    Alert.alert(item.label, 'Choose an action', [
-      { text: 'Rename', onPress: () => { setRenameTarget(item); setRenameText(item.label); } },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () =>
-          Alert.alert('Delete Case', `Delete "${item.label}"? This cannot be undone.`, [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Delete', style: 'destructive', onPress: () => removeXRay(item.id) },
-          ]),
-      },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
-  }
-
-  async function commitRename() {
-    if (renameTarget && renameText.trim()) {
-      await renameXRay(renameTarget.id, renameText.trim());
-    }
-    setRenameTarget(null);
+  function openEdit(entry: XRayEntry) {
+    router.push({ pathname: '/edit', params: { id: entry.id } });
   }
 
   const renderItem = ({ item }: { item: XRayEntry }) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => openOverlay(item)}
-      onLongPress={() => showOptions(item)}
+      onLongPress={() => openEdit(item)}
       activeOpacity={0.8}
     >
       <View style={styles.cardIcon}><IconBone /></View>
@@ -87,6 +67,20 @@ export default function CasesTab({ library, loading, renameXRay, removeXRay, onI
         <Text style={styles.cardSub}>
           {new Date(item.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
         </Text>
+        {item.tags && item.tags.length > 0 && (
+          <View style={styles.tagRow}>
+            {item.tags.slice(0, 3).map(tag => (
+              <View key={tag} style={styles.tagPill}>
+                <Text style={styles.tagText}>{tag}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+        {!!item.captures?.length && (
+          <Text style={styles.captureCount}>
+            {item.captures.length} capture{item.captures.length !== 1 ? 's' : ''}
+          </Text>
+        )}
       </View>
       <StatusPill tone="info">Ready</StatusPill>
       <IconChevron />
@@ -119,30 +113,6 @@ export default function CasesTab({ library, loading, renameXRay, removeXRay, onI
           contentContainerStyle={styles.list}
         />
       )}
-
-      <Modal visible={!!renameTarget} transparent animationType="fade">
-        <View style={styles.modalBg}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalTitle}>Rename X-Ray</Text>
-            <TextInput
-              style={styles.modalInput}
-              value={renameText}
-              onChangeText={setRenameText}
-              autoFocus
-              selectTextOnFocus
-              placeholderTextColor={colors.fg4}
-            />
-            <View style={styles.modalActions}>
-              <TouchableOpacity onPress={() => setRenameTarget(null)} style={styles.modalBtn}>
-                <Text style={styles.modalBtnText}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={commitRename} style={[styles.modalBtn, styles.modalBtnAccent]}>
-                <Text style={[styles.modalBtnText, { color: colors.bg }]}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -164,6 +134,15 @@ const styles = StyleSheet.create({
   cardId: { fontSize: fontSize.xs, letterSpacing: tracking.wide, color: colors.cyan300, fontWeight: '500' },
   cardTitle: { fontSize: fontSize.base, fontWeight: '600', color: colors.fg1, marginTop: 2 },
   cardSub: { fontSize: fontSize.xs, color: colors.fg3, marginTop: 2 },
+  tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: space[1], marginTop: space[2] },
+  tagPill: {
+    paddingHorizontal: 8, paddingVertical: 2,
+    borderRadius: radii.pill, borderWidth: 1,
+    borderColor: 'rgba(79,195,247,0.4)',
+    backgroundColor: 'rgba(79,195,247,0.1)',
+  },
+  tagText: { fontSize: 10, color: colors.cyan300, fontWeight: '500' },
+  captureCount: { fontSize: 10, color: colors.fg4, marginTop: 2 },
   empty: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: space[2] },
   emptyIconWrap: {
     width: 72, height: 72, borderRadius: radii.xl,
@@ -177,12 +156,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: space[6], paddingVertical: space[3], borderRadius: radii.pill,
   },
   emptyBtnText: { color: colors.bg, fontWeight: '700', fontSize: fontSize.base },
-  modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' },
-  modalBox: { backgroundColor: colors.surface2, borderRadius: radii.lg, padding: space[6], width: '80%', gap: space[4] },
-  modalTitle: { color: colors.fg1, fontSize: fontSize.md, fontWeight: '700' },
-  modalInput: { borderWidth: 1, borderColor: colors.border2, borderRadius: radii.sm, padding: space[3], color: colors.fg1, fontSize: fontSize.sm },
-  modalActions: { flexDirection: 'row', gap: space[3] },
-  modalBtn: { flex: 1, borderWidth: 1, borderColor: colors.border2, borderRadius: radii.sm, paddingVertical: space[3], alignItems: 'center' },
-  modalBtnAccent: { backgroundColor: colors.brand, borderColor: colors.brand },
-  modalBtnText: { color: colors.fg1, fontWeight: '600', fontSize: fontSize.sm },
 });

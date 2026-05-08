@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
+import { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { Gesture } from 'react-native-gesture-handler';
 
 export function useOverlayGesture() {
@@ -52,10 +51,14 @@ export function useOverlayGesture() {
   }));
 
   const reset = () => {
-    translateX.value = 0;
-    translateY.value = 0;
-    scale.value = 1;
-    rotation.value = 0;
+    translateX.value = withSpring(0, { damping: 20, stiffness: 200 });
+    translateY.value = withSpring(0, { damping: 20, stiffness: 200 });
+    scale.value = withSpring(1, { damping: 20, stiffness: 200 });
+    rotation.value = withSpring(0, { damping: 20, stiffness: 200 });
+    savedTX.value = 0;
+    savedTY.value = 0;
+    savedScale.value = 1;
+    savedRotation.value = 0;
   };
 
   const getSnapshot = () => ({
